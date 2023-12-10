@@ -1,4 +1,5 @@
-﻿using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Core;
+using CounterStrikeSharp.API.Modules.Cvars;
 
 namespace RoundEndLowGravity;
 
@@ -17,13 +18,13 @@ public class RoundEndLowGravity : BasePlugin
         RegisterEventHandler<EventRoundEnd>(Event_RoundEnd, HookMode.Post);
     }
 
-    int endtimer = ConVar.Find("sv_cheats");
+    float roundtimer = ConVar.Find("mp_round_restart_delay").GetPrimitiveValue<float>();
 
     private HookResult Event_RoundEnd(EventRoundEnd @event, GameEventInfo info)
     {
         NativeAPI.IssueServerCommand("sv_gravity 200");
 
-        base.AddTimer(endtimer, () =>
+        base.AddTimer(roundtimer, () =>
         {
             NativeAPI.IssueServerCommand("sv_gravity 800");
         });
